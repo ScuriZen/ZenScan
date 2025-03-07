@@ -6,7 +6,8 @@ def run_port_scan(target):
     print(f"\n[+] Running Port Scan on {target}...\n")
 
     open_ports = []
-    common_ports = list(range(20, 1025))  
+    # common_ports = list(range(20, 1025))  
+    common_ports = [21, 22, 23, 25, 53, 80, 443, 8080]
 
     with tqdm(total=len(common_ports), desc="Scanning Ports", ncols=75, ascii=True, colour="cyan") as pbar:
         for port in common_ports:
