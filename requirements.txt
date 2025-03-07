@@ -3,4 +3,5 @@ wapiti3
 flask
 requests
 sqlmap
+tqdm
 
