@@ -1,19 +1,23 @@
-import time
 import nmap
 from tqdm import tqdm
+import time
 
 def run_nmap_scan(target):
-    print("\n[+] Running Nmap Scan on:", target)
-    
-    # Simulating a loading progress bar
-    for _ in tqdm(range(100), desc="Scanning", ncols=75, ascii=True, colour="blue"):
-        time.sleep(0.03)  # Simulating scan progress
+    print(f"\n[+] Running Nmap Scan on {target}...\n")
     
     scanner = nmap.PortScanner()
+    
+    # Perform scan and update progress bar dynamically
     scanner.scan(target, arguments="-sV")
+    hosts = scanner.all_hosts()
 
+    with tqdm(total=len(hosts), desc="Scanning Hosts", ncols=75, ascii=True, colour="blue") as pbar:
+        for host in hosts:
+            time.sleep(0.5)  # Simulating processing time
+            pbar.update(1)  # Move progress bar forward
+    
     print("\n[+] Nmap Scan Results:")
-    for host in scanner.all_hosts():
+    for host in hosts:
         print(f"Host: {host} ({scanner[host].hostname()})")
         print("State:", scanner[host].state())
         for proto in scanner[host].all_protocols():
