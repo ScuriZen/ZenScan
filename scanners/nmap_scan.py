@@ -1,6 +1,6 @@
-import nmap
+import os
 
 def run_nmap_scan(target):
-    scanner = nmap.PortScanner()
-    scanner.scan(target, arguments="-sV -Pn")
-    return scanner.all_hosts()
+    print(f"Running Nmap scan on {target}...")
+    os.system(f"nmap -A {target}")
+

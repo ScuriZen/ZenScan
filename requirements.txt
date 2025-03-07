@@ -1,5 +1,6 @@
-requests
 python-nmap
 wapiti3
 flask
+requests
+sqlmap
 
