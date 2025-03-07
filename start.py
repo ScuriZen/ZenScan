@@ -19,20 +19,26 @@ def main():
 
         if choice == "1":
             target = input("Enter target domain/IP: ").strip()
-            run_nmap_scan(target)
+            output = run_nmap_scan(target)
+            print("\n\033[92m[✔] Nmap Scan Results:\033[0m")  # Green color output
+            print(output)
         elif choice == "2":
             target = input("Enter target domain/IP: ").strip()
-            run_port_scan(target)
+            output = run_port_scan(target)
+            print("\n\033[94m[✔] Port Scan Results:\033[0m")  # Blue color output
+            print(output)
         elif choice == "3":
             target = input("Enter target URL: ").strip()
-            run_sqlmap_scan(target)
+            output = run_sqlmap_scan(target)
+            print("\n\033[91m[✔] SQL Injection Scan Results:\033[0m")  # Red color output
+            print(output)
         elif choice == "4":
             print("Exiting ZenScan. Goodbye!")
             sys.exit()
         else:
-            print("Invalid choice! Please try again.")
-        time.sleep(2)
+            print("\n\033[93m[✘] Invalid choice! Please try again.\033[0m")  # Yellow color output
+
+        input("\nPress Enter to continue...")  # Pause before clearing the screen
 
 if __name__ == "__main__":
     main()
-
