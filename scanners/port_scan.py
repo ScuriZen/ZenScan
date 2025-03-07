@@ -6,7 +6,7 @@ def run_port_scan(target):
     print(f"\n[+] Running Port Scan on {target}...\n")
 
     open_ports = []
-    common_ports = list(range(20, 1025))  # List of ports to scan
+    common_ports = list(range(20, 1025))  
 
     with tqdm(total=len(common_ports), desc="Scanning Ports", ncols=75, ascii=True, colour="cyan") as pbar:
         for port in common_ports:
@@ -16,7 +16,7 @@ def run_port_scan(target):
             if result == 0:
                 open_ports.append(port)
             s.close()
-            pbar.update(1)  # Move progress bar forward
+            pbar.update(1) 
 
     print("\n[+] Open Ports Found:")
     if open_ports:
