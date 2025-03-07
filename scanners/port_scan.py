@@ -1,19 +1,28 @@
 import socket
+import time
+from tqdm import tqdm
 
 def run_port_scan(target):
-    print(f"\n\033[94m[+] Scanning open ports on {target}...\033[0m\n")
-    common_ports = [21, 22, 23, 25, 53, 80, 443, 8080]
-    result = ""
+    print("\n[+] Running Port Scan on:", target)
 
-    for port in common_ports:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(1)
-        result_code = sock.connect_ex((target, port))
-        if result_code == 0:
-            result += f"✔ Port {port} is \033[92mOPEN\033[0m\n"
-        else:
-            result += f"✘ Port {port} is \033[91mCLOSED\033[0m\n"
-        sock.close()
+    # Simulating a loading progress bar
+    for _ in tqdm(range(100), desc="Scanning", ncols=75, ascii=True, colour="cyan"):
+        time.sleep(0.03)  # Simulating scan progress
 
-    return result  # Returning output
+    open_ports = []
+    for port in range(20, 1025):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(1)
+        result = s.connect_ex((target, port))
+        if result == 0:
+            open_ports.append(port)
+        s.close()
 
+    print("\n[+] Open Ports Found:")
+    if open_ports:
+        for port in open_ports:
+            print(f"Port {port} is Open")
+    else:
+        print("No open ports found.")
+
+    print("\n[+] Scan Completed!")
