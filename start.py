@@ -7,7 +7,6 @@ from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
 
-
 def main():
     while True:
         os.system('clear' if os.name == 'posix' else 'cls')
@@ -42,4 +41,4 @@ def main():
         else:
             print("\n[✘] Invalid choice! Please try again.")
 
-        input("\nPress Enter to continue...")  
+        input("\nPress Enter to continue...")  # Pause before clearing screen
