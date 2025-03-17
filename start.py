@@ -5,12 +5,14 @@ from banners import zen_banner
 from scanners.nmap_scan import run_nmap_scan
 from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
+from scanners.wapiti_scan import run_wapiti_scan
 from scanners.dir_scan import run_dir_scan
 
 def main():
+    zen_banner()
+    print("\n\033[94m[✔] ZenScan - Advanced Security Scanner\033[0m\n")
+
     while True:
-        os.system('clear' if os.name == 'posix' else 'cls')
-        zen_banner()
         print("\n[1] Nmap Scan")
         print("[2] Port Scan")
         print("[3] SQL Injection Scan")
