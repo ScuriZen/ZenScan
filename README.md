@@ -14,7 +14,7 @@
 
 📌 Installation & Usage (Linux)
 Step 1: Clone the repository
-git clone https://github.com/ScuriZen/ZenScan.git
+git clone https://github.com/ScuriZen/ZenScan.git 
 cd ZenScan
 
 Step 2: Install dependencies
