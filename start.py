@@ -6,6 +6,7 @@ from scanners.nmap_scan import run_nmap_scan
 from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
+from scanners.wapiti_scan import run_wapiti_scan
 
 def main():
     while True:
@@ -21,27 +22,38 @@ def main():
         choice = input("\nEnter your choice: ").strip()
 
         if choice == "1":
-            target = input("Enter target domain/IP: ").strip()
+            target = input("\nEnter target domain/IP: ").strip()
+            print("\n\033[93m[🔎] Starting Nmap Scan...\033[0m\n")
             run_nmap_scan(target)
+        
         elif choice == "2":
-            target = input("Enter target domain/IP: ").strip()
+            target = input("\nEnter target domain/IP: ").strip()
+            print("\n\033[93m[🔎] Starting Port Scan...\033[0m\n")
             run_port_scan(target)
+        
         elif choice == "3":
-            target = input("Enter target URL: ").strip()
+            target = input("\nEnter target URL: ").strip()
+            print("\n\033[93m[🔎] Starting SQL Injection Scan...\033[0m\n")
             run_sqlmap_scan(target)
+        
         elif choice == "4":
-            target = input("Enter target URL: ").strip()
+            target = input("\nEnter target URL: ").strip()
+            print("\n\033[93m[🔎] Starting Web Vulnerability Scan...\033[0m\n")
             run_wapiti_scan(target)
+        
         elif choice == "5":
-            target = input("Enter target URL (e.g., https://example.com): ").strip()
+            target = input("\nEnter target URL (e.g., https://example.com): ").strip()
+            print("\n\033[93m[🔎] Starting Directory Scan...\033[0m\n")
             run_dir_scan(target)
+        
         elif choice == "6":
-            print("Exiting ZenScan. Goodbye!")
+            print("\n\033[91m[✘] Exiting ZenScan. Goodbye!\033[0m\n")
             sys.exit()
+        
         else:
-            print("\n[✘] Invalid choice! Please try again.")
+            print("\n\033[91m[✘] Invalid choice! Please try again.\033[0m")
 
-        input("\nPress Enter to continue...") 
+        input("\n\033[94mPress Enter to continue...\033[0m\n")
 
 if __name__ == "__main__":
     main()
