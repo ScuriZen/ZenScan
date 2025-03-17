@@ -41,4 +41,7 @@ def main():
         else:
             print("\n[✘] Invalid choice! Please try again.")
 
-        input("\nPress Enter to continue...")  # Pause before clearing screen
+        input("\nPress Enter to continue...") 
+
+if __name__ == "__main__":
+    main()
