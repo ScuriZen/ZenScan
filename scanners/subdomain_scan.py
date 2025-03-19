@@ -1,11 +1,11 @@
 import requests
 import dns.resolver
 import concurrent.futures
+import json
 import sys
 import os
-import json
 
-# API sources for subdomain enumeration
+# OSINT API Sources
 API_SOURCES = [
     "https://crt.sh/?q=%.{domain}&output=json",
     "https://otx.alienvault.com/api/v1/indicators/domain/{domain}/passive_dns",
@@ -14,21 +14,33 @@ API_SOURCES = [
 ]
 
 # Default wordlist for brute-force
-DEFAULT_SUBDOMAIN_WORDLIST = [
+DEFAULT_WORDLIST = [
     "admin", "mail", "ftp", "test", "dev", "staging", "api", "secure",
-    "portal", "beta", "edge", "dashboard", "vpn", "office", "sso"
+    "vpn", "portal", "blog", "beta", "dashboard", "sso", "app", "auth", "download"
 ]
 
-# Fetch subdomains from OSINT APIs
+# Check if subdomain is active (Handles Errors)
+def is_active(subdomain):
+    if not subdomain or subdomain.startswith("."):  # Avoid empty labels
+        return False
+
+    try:
+        dns.resolver.resolve(subdomain, 'A')
+        return True
+    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.LifetimeTimeout, dns.name.EmptyLabel):
+        return False
+
+# OSINT API Enumeration
 def fetch_subdomains_from_apis(domain):
     subdomains = set()
+    print("\n🔍 Fetching subdomains from OSINT sources...")
     for api in API_SOURCES:
         try:
             url = api.format(domain=domain)
             response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 data = response.json()
-                if isinstance(data, list):  # Handling crt.sh response
+                if isinstance(data, list):  # crt.sh
                     for entry in data:
                         subdomains.add(entry['name_value'])
                 elif 'passive_dns' in data:
@@ -38,85 +50,81 @@ def fetch_subdomains_from_apis(domain):
                     subdomains.update(data['subdomains'])
         except:
             continue
+    
+    # Print OSINT results in real-time
+    for sub in sorted(subdomains):
+        print(f"🌍 [OSINT] ✅ {sub}")
+    
     return subdomains
 
-# Load custom wordlist from a file
-def load_custom_wordlist(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            return [line.strip() for line in file.readlines()]
-    else:
-        print("❌ File not found! Using default wordlist.")
-        return DEFAULT_SUBDOMAIN_WORDLIST
-
-# Check if a subdomain is active
-def is_active(subdomain):
-    try:
-        dns.resolver.resolve(subdomain, 'A')
-        return True
-    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.LifetimeTimeout):
-        return False
-
-# Brute-force subdomains using a wordlist
+# Brute-force Subdomains (Handles Empty Lines)
 def brute_force_subdomains(domain, wordlist):
     subdomains = set()
+    print(f"\n🚀 Starting brute-force scan for {domain}...")
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         future_to_subdomain = {
-            executor.submit(is_active, f"{sub}.{domain}"): f"{sub}.{domain}"
-            for sub in wordlist
+            executor.submit(is_active, f"{sub.strip()}.{domain}"): f"{sub.strip()}.{domain}"
+            for sub in wordlist if sub.strip()  # Skip empty lines
         }
         for future in concurrent.futures.as_completed(future_to_subdomain):
             subdomain = future_to_subdomain[future]
             if future.result():
                 subdomains.add(subdomain)
+                print(f"🔹 [LIVE] ✅ {subdomain}")  # Print result immediately
+    
     return subdomains
 
-# Main function
-def run_subdomain_scan():
-    print("\n" + "="*50)
-    print(" 🔎 ZenScan - Subdomain Enumeration")
-    print("="*50)
+# Main function with user choice
+def subdomain_enumeration(domain, mode, custom_wordlist=None):
+    print(f"\n🔎 Enumerating subdomains for: {domain}\n")
+    all_subdomains = set()
 
-    # Ask for scan method
-    print("\n[1] OSINT API Enumeration")
-    print("[2] Brute-force with Dictionary")
-    choice = input("\nEnter your choice: ")
+    if mode == "1":
+        osint_results = fetch_subdomains_from_apis(domain)
+        all_subdomains.update(osint_results)
 
-    if choice not in ["1", "2"]:
-        print("❌ Invalid choice! Exiting.")
-        return
+        brute_results = brute_force_subdomains(domain, DEFAULT_WORDLIST)
+        all_subdomains.update(brute_results)
 
-    domain = input("\n🌍 Enter target domain: ")
+    elif mode == "2" and custom_wordlist:
+        if not os.path.isfile(custom_wordlist):
+            print("❌ Invalid wordlist path! Please enter a valid file.")
+            sys.exit(1)
 
-    if choice == "1":
-        print("\n🔍 Fetching subdomains from OSINT sources...")
-        api_results = fetch_subdomains_from_apis(domain)
-        print(f"✅ Found {len(api_results)} subdomains from APIs")
+        with open(custom_wordlist, "r") as file:
+            wordlist = [line.strip() for line in file if line.strip()]  # Remove empty lines
 
-        for sub in sorted(api_results):
-            print(f"🔹 {sub}")
+        print(f"📂 Using custom wordlist with {len(wordlist)} entries...\n")
+        custom_results = brute_force_subdomains(domain, wordlist)
+        all_subdomains.update(custom_results)
 
-    elif choice == "2":
-        print("\n[1] Use Default Dictionary")
-        print("[2] Provide Custom Dictionary Path")
-        dict_choice = input("\nEnter your choice: ")
-
-        if dict_choice == "2":
-            file_path = input("📂 Enter dictionary file path: ")
-            wordlist = load_custom_wordlist(file_path)
-        else:
-            wordlist = DEFAULT_SUBDOMAIN_WORDLIST
-
-        print("\n🔍 Running brute-force subdomain enumeration...")
-        brute_results = brute_force_subdomains(domain, wordlist)
-        print(f"✅ Found {len(brute_results)} subdomains")
-
-        for sub in sorted(brute_results):
-            print(f"🔹 {sub}")
+    else:
+        print("❌ Invalid choice! Please select a valid option.")
+        sys.exit(1)
 
     print("\n🎯 Subdomain Enumeration Completed!")
-    print("="*50)
+    return all_subdomains
 
-# Execute if running as standalone script
+# Script Execution
 if __name__ == "__main__":
-    run_subdomain_scan()
+    if len(sys.argv) < 2:
+        print("Usage: python subdomain_scan.py <domain>")
+        sys.exit(1)
+
+    target_domain = sys.argv[1]
+
+    print("\nSelect scanning mode:")
+    print("1️⃣ OSINT API + Default Dictionary")
+    print("2️⃣ Custom Wordlist Brute-force")
+
+    choice = input("Enter option (1 or 2): ").strip()
+
+    if choice == "1":
+        subdomain_enumeration(target_domain, "1")
+    elif choice == "2":
+        custom_list = input("Enter path to your wordlist file: ").strip()
+        subdomain_enumeration(target_domain, "2", custom_list)
+    else:
+        print("❌ Invalid choice! Exiting.")
+        sys.exit(1)
