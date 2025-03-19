@@ -6,7 +6,7 @@ from scanners.nmap_scan import run_nmap_scan
 from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
-from subdomain_scan import run_subdomain_scan
+from scanners.subdomain_scan import run_subdomain_scan
 
 def main():
     zen_banner()
