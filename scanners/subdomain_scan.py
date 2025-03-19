@@ -114,6 +114,10 @@ if __name__ == "__main__":
 
     target_domain = sys.argv[1]
 
+    print("\n" + "="*50)
+    print(" 🔎 ZenScan - Subdomain Enumeration")
+    print("="*50)
+
     print("\nSelect scanning mode:")
     print("1️⃣ OSINT API + Default Dictionary")
     print("2️⃣ Custom Wordlist Brute-force")
