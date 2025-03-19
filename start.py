@@ -6,6 +6,7 @@ from scanners.nmap_scan import run_nmap_scan
 from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
+from subdomain_scan import run_subdomain_scan
 
 def main():
     zen_banner()
@@ -17,7 +18,8 @@ def main():
         print("[3] SQL Injection Scan")
         print("[4] Web Vulnerability Scan (Wapiti)")
         print("[5] Directory Scanner")
-        print("[6] Exit")
+        print("[6] Subdomain Enumeration")
+        print("[7] Exit")
 
         choice = input("\nEnter your choice: ").strip()
 
@@ -45,8 +47,12 @@ def main():
             target = input("\nEnter target URL (e.g., https://example.com): ").strip()
             print("\n\033[93m[🔎] Starting Directory Scan...\033[0m\n")
             run_dir_scan(target)
-        
+
         elif choice == "6":
+            target = input("Enter target domain: ")
+            run_subdomain_scan(target)
+        
+        elif choice == "7":
             print("\n\033[91m[✘] Exiting ZenScan. Goodbye!\033[0m\n")
             sys.exit()
         
