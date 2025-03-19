@@ -3,7 +3,9 @@ import time
 from tqdm import tqdm
 
 def run_port_scan(target):
-    print(f"\n[+] Running Port Scan on {target}...\n")
+    print("\n" + "="*50)
+    print(f" 🔎 ZenScan - Running Port Scan on {target}")
+    print("="*50)
 
     open_ports = []
     common_ports = list(range(20, 1025))  
