@@ -15,7 +15,7 @@ API_SOURCES = [
 
 # Default wordlist for brute-force
 DEFAULT_WORDLIST = [
-    "admin", "mail", "ftp", "test", "dev", "staging", "api", "secure",
+    "admin", "mail", "webmail", "ftp", "test", "dev", "staging", "api", "secure",
     "vpn", "portal", "blog", "beta", "dashboard", "sso", "app", "auth", "download"
 ]
 
@@ -75,7 +75,7 @@ def brute_force_subdomains(domain, wordlist):
     
     return subdomains
 
-# Main function with user choice
+# Main function for ZenScan integration
 def subdomain_enumeration(domain, mode, custom_wordlist=None):
     print(f"\n🔎 Enumerating subdomains for: {domain}\n")
     all_subdomains = set()
@@ -106,18 +106,11 @@ def subdomain_enumeration(domain, mode, custom_wordlist=None):
     print("\n🎯 Subdomain Enumeration Completed!")
     return all_subdomains
 
-# Script Execution
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python subdomain_scan.py <domain>")
-        sys.exit(1)
-
-    target_domain = sys.argv[1]
-
+# Function to integrate with start.py
+def run_subdomain_scan(domain):
     print("\n" + "="*50)
     print(" 🔎 ZenScan - Subdomain Enumeration")
     print("="*50)
-
     print("\nSelect scanning mode:")
     print("1️⃣ OSINT API + Default Dictionary")
     print("2️⃣ Custom Wordlist Brute-force")
@@ -125,10 +118,19 @@ if __name__ == "__main__":
     choice = input("Enter option (1 or 2): ").strip()
 
     if choice == "1":
-        subdomain_enumeration(target_domain, "1")
+        subdomain_enumeration(domain, "1")
     elif choice == "2":
         custom_list = input("Enter path to your wordlist file: ").strip()
-        subdomain_enumeration(target_domain, "2", custom_list)
+        subdomain_enumeration(domain, "2", custom_list)
     else:
         print("❌ Invalid choice! Exiting.")
         sys.exit(1)
+
+# Script Execution
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python subdomain_scan.py <domain>")
+        sys.exit(1)
+
+    target_domain = sys.argv[1]
+    run_subdomain_scan(target_domain)
