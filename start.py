@@ -7,6 +7,7 @@ from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
 from scanners.subdomain_scan import run_subdomain_scan
+import ip
 
 def main():
     zen_banner()
@@ -19,7 +20,8 @@ def main():
         print("[4] Web Vulnerability Scan (Wapiti)")
         print("[5] Directory Scanner")
         print("[6] Subdomain Enumeration")
-        print("[7] Exit")
+        print("[7] IP Range Scanner with live device information")
+        print("[8] Exit")
 
         choice = input("\nEnter your choice: ").strip()
 
@@ -51,8 +53,12 @@ def main():
         elif choice == "6":
             target = input("Enter target domain: ")
             run_subdomain_scan(target)
-        
-        elif choice == "7":
+
+        elif choice == '7':
+            print("\n🌐 Launching IP Range Scanner...")
+            ip.start_ip_scan()
+
+        elif choice == "8":
             print("\n\033[91m[✘] Exiting ZenScan. Goodbye!\033[0m\n")
             sys.exit()
         
