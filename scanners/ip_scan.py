@@ -132,11 +132,11 @@ def scan_ip_range(start_ip, end_ip):
     return active_devices
 
 
-def start_ip_scan():
+def run_ip_scan():
     start_ip = input("Enter start IP: ").strip()
     end_ip = input("Enter end IP: ").strip()
     scan_ip_range(start_ip, end_ip)
   
 if __name__ == "__main__":
-    start_ip_scan()
+    run_ip_scan()
                                         
