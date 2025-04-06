@@ -144,14 +144,14 @@ def run_ip_range(start_ip, end_ip):
                 hostname = get_hostname(ip)
                 os_info = get_os_info(ip)
 
-                # Get brand from hostname if available, otherwise use 'Unknown'
-                brand = hostname.split('.')[0] if hostname else "Unknown"
+                # Device Name / Brand logic
+                device_name = hostname.split('.')[0] if hostname else "Unknown"
 
                 print(f"""✅ [LIVE]
 🌐 IP: {ip}
 🔍 MAC: {mac_address}
 🏭 Vendor: {vendor}
-🏷️ Brand: {brand}
+📛 Device Name: {device_name}
 🖥️ Device Type: {device_type}
 🧠 OS: {os_info}
 🔠 Hostname: {hostname}
@@ -160,6 +160,7 @@ def run_ip_range(start_ip, end_ip):
 
     print("🎯 Scan Complete!")
     return active_devices
+
 
 
 def run_ip_scan():
