@@ -61,15 +61,20 @@ def get_mac_and_vendor(ip):
 def get_hostname(ip):
     """Resolve hostname using DNS, fallback to nbtscan for NetBIOS name."""
     try:
+        # Try DNS-based hostname resolution
         return socket.gethostbyaddr(ip)[0]
     except Exception:
         try:
-            output = subprocess.check_output(["nbtscan", "-s", ",", ip], stderr=subprocess.DEVNULL, text=True)
+            # Use nbtscan to get NetBIOS name
+            output = subprocess.check_output(["nbtscan", ip], stderr=subprocess.DEVNULL, text=True)
             lines = output.strip().splitlines()
-            if len(lines) > 1:
-                fields = lines[1].split(",")
-                if len(fields) > 1:
-                    return fields[1].strip()
+            for line in lines:
+                if ip in line and "<00>" in line:
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        name_index = line.find(ip) + len(ip)
+                        name = line[name_index:].split()[0].strip()
+                        return name
         except Exception:
             pass
     return ""
