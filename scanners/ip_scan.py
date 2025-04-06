@@ -22,67 +22,39 @@ def get_mac(ip):
 
 
 def get_mac_and_vendor(ip):
-    """Retrieve MAC address and guess vendor based on MAC prefix patterns."""
+    """Retrieve MAC address and vendor using mac-vendor-lookup and fallback to prefix map."""
     mac_address = get_mac(ip)
     vendor = "Unknown"
 
     if mac_address:
-        prefix = mac_address.upper().replace(":", "").replace("-", "")[:6]
+        try:
+            vendor = mac.lookup(mac_address)
+        except Exception:
+            # fallback to hardcoded prefix lookup
+            prefix = mac_address.upper().replace(":", "").replace("-", "")[:6]
 
-        vendor_prefixes = {
-            # Apple
-            "D8BB2C": "Apple", "F0D5BF": "Apple", "3C0754": "Apple", "A4B121": "Apple", "90B21F": "Apple",
+            vendor_prefixes = {
+                "D8BB2C": "Apple", "F0D5BF": "Apple", "3C0754": "Apple", "A4B121": "Apple", "90B21F": "Apple",
+                "BC83A7": "Samsung", "60D819": "Samsung", "0026C7": "Samsung", "1CB72C": "Samsung", "6CB7F4": "Samsung",
+                "60EB69": "Xiaomi", "A0F3C1": "Xiaomi", "3C5A37": "Xiaomi", "B0E235": "Xiaomi", "48A9D2": "Xiaomi",
+                "A0B4A5": "Huawei", "FCAA14": "Huawei", "30F335": "Huawei", "84A466": "Huawei", "C4AD34": "Huawei",
+                "3C57D5": "TP-Link", "FCFC48": "TP-Link", "30B5C2": "TP-Link", "647002": "TP-Link", "50984B": "TP-Link",
+                "FCF5C4": "Netgear", "A02BB8": "Netgear", "28C68E": "Netgear", "001E2A": "Netgear", "0026F2": "Netgear",
+                "D067E5": "Dell", "C8D3A3": "Dell", "1C697A": "Dell", "F8BC12": "Dell", "F0F1A9": "Dell",
+                "0026B6": "Canon", "B8B5AF": "Canon", "089E08": "Canon", "0021E9": "Canon",
+                "AC9B0A": "Hikvision", "D4AE52": "Hikvision", "64A837": "Hikvision",
+                "000C29": "VMware", "000569": "VMware", "005056": "VMware",
+                "DC44B6": "Raspberry Pi", "B827EB": "Raspberry Pi", "E45F01": "Raspberry Pi",
+                "00000C": "Cisco", "F8E71E": "Cisco", "705AB6": "Cisco",
+                "3C970E": "Intel", "F0DE71": "Intel", "A0369F": "Intel",
+                "1C7508": "HP", "B4B52F": "HP", "B0A8B9": "HP",
+                "F8A45F": "Asus", "14D6XX": "Asus", "74D435": "Asus",
+                "041E64": "Lenovo", "28D244": "Lenovo", "001EC9": "Lenovo",
+            }
 
-            # Samsung
-            "BC83A7": "Samsung", "60D819": "Samsung", "0026C7": "Samsung", "1CB72C": "Samsung", "6CB7F4": "Samsung",
-
-            # Xiaomi
-            "60EB69": "Xiaomi", "A0F3C1": "Xiaomi", "3C5A37": "Xiaomi", "B0E235": "Xiaomi", "48A9D2": "Xiaomi",
-
-            # Huawei
-            "A0B4A5": "Huawei", "FCAA14": "Huawei", "30F335": "Huawei", "84A466": "Huawei", "C4AD34": "Huawei",
-
-            # TP-Link
-            "3C57D5": "TP-Link", "FCFC48": "TP-Link", "30B5C2": "TP-Link", "647002": "TP-Link", "50984B": "TP-Link",
-
-            # Netgear
-            "FCF5C4": "Netgear", "A02BB8": "Netgear", "28C68E": "Netgear", "001E2A": "Netgear", "0026F2": "Netgear",
-
-            # Dell
-            "D067E5": "Dell", "C8D3A3": "Dell", "1C697A": "Dell", "F8BC12": "Dell", "F0F1A9": "Dell",
-
-            # Canon
-            "0026B6": "Canon", "B8B5AF": "Canon", "089E08": "Canon", "0021E9": "Canon",
-
-            # Hikvision
-            "AC9B0A": "Hikvision", "D4AE52": "Hikvision", "64A837": "Hikvision",
-
-            # VMware
-            "000C29": "VMware", "000569": "VMware", "005056": "VMware",
-
-            # Raspberry Pi
-            "DC44B6": "Raspberry Pi", "B827EB": "Raspberry Pi", "E45F01": "Raspberry Pi",
-
-            # Cisco
-            "00000C": "Cisco", "F8E71E": "Cisco", "705AB6": "Cisco",
-
-            # Intel
-            "3C970E": "Intel", "F0DE71": "Intel", "A0369F": "Intel",
-
-            # HP
-            "1C7508": "HP", "B4B52F": "HP", "B0A8B9": "HP",
-
-            # Asus
-            "F8A45F": "Asus", "14D6XX": "Asus", "74D435": "Asus",
-
-            # Lenovo
-            "041E64": "Lenovo", "28D244": "Lenovo", "001EC9": "Lenovo",
-        }
-
-        vendor = vendor_prefixes.get(prefix, "Unknown")
+            vendor = vendor_prefixes.get(prefix, "Unknown")
 
     return mac_address, vendor
-
 
 
 
