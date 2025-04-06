@@ -7,7 +7,7 @@ from scanners.port_scan import run_port_scan
 from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
 from scanners.subdomain_scan import run_subdomain_scan
-import ip
+from scanners.ip_scan import run_ip_scan
 
 def main():
     zen_banner()
