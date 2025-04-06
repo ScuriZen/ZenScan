@@ -22,10 +22,39 @@ def get_mac(ip):
 
 
 def get_mac_and_vendor(ip):
-    """Retrieve MAC and vendor for the IP."""
+    """Retrieve MAC address and guess vendor based on MAC prefix patterns."""
     mac_address = get_mac(ip)
-    vendor = mac.lookup(mac_address) if mac_address else "Unknown"
+    vendor = "Unknown"
+
+    if mac_address:
+        prefix = mac_address.upper().replace(":", "").replace("-", "")[:6]
+        if prefix.startswith("D8BB2C") or prefix.startswith("F0D5BF"):
+            vendor = "Apple"
+        elif prefix.startswith("BC83A7"):
+            vendor = "Samsung"
+        elif prefix.startswith("60EB69"):
+            vendor = "Xiaomi"
+        elif prefix.startswith("A0B4A5"):
+            vendor = "Huawei"
+        elif prefix.startswith("3C57D5") or prefix.startswith("FCFC48"):
+            vendor = "TP-Link"
+        elif prefix.startswith("FCF5C4"):
+            vendor = "Netgear"
+        elif prefix.startswith("D067E5") or prefix.startswith("C8D3A3"):
+            vendor = "Dell"
+        elif prefix.startswith("0026B6"):
+            vendor = "Canon"
+        elif prefix.startswith("AC9B0A"):
+            vendor = "Hikvision"
+        elif prefix.startswith("000C29") or prefix.startswith("000569"):
+            vendor = "VMware"
+        elif prefix.startswith("DC44B6"):
+            vendor = "Raspberry Pi"
+        else:
+            vendor = "Unknown"
+
     return mac_address, vendor
+
 
 
 def get_hostname(ip):
