@@ -89,7 +89,7 @@ def identify_device(vendor):
         return "Unknown Device"
 
 
-def scan_ip_range(start_ip, end_ip):
+def run_ip_range(start_ip, end_ip):
     """Scan IPs in given range and return details of active devices."""
     print(f"\n🚀 Scanning IP range: {start_ip} - {end_ip}...\n")
 
