@@ -56,7 +56,7 @@ def main():
 
         elif choice == '7':
             print("\n🌐 Launching IP Range Scanner...")
-            ip.run_ip_scan()
+            run_ip_scan()
 
         elif choice == "8":
             print("\n\033[91m[✘] Exiting ZenScan. Goodbye!\033[0m\n")
