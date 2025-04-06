@@ -28,32 +28,61 @@ def get_mac_and_vendor(ip):
 
     if mac_address:
         prefix = mac_address.upper().replace(":", "").replace("-", "")[:6]
-        if prefix.startswith("D8BB2C") or prefix.startswith("F0D5BF"):
-            vendor = "Apple"
-        elif prefix.startswith("BC83A7"):
-            vendor = "Samsung"
-        elif prefix.startswith("60EB69"):
-            vendor = "Xiaomi"
-        elif prefix.startswith("A0B4A5"):
-            vendor = "Huawei"
-        elif prefix.startswith("3C57D5") or prefix.startswith("FCFC48"):
-            vendor = "TP-Link"
-        elif prefix.startswith("FCF5C4"):
-            vendor = "Netgear"
-        elif prefix.startswith("D067E5") or prefix.startswith("C8D3A3"):
-            vendor = "Dell"
-        elif prefix.startswith("0026B6"):
-            vendor = "Canon"
-        elif prefix.startswith("AC9B0A"):
-            vendor = "Hikvision"
-        elif prefix.startswith("000C29") or prefix.startswith("000569"):
-            vendor = "VMware"
-        elif prefix.startswith("DC44B6"):
-            vendor = "Raspberry Pi"
-        else:
-            vendor = "Unknown"
+
+        vendor_prefixes = {
+            # Apple
+            "D8BB2C": "Apple", "F0D5BF": "Apple", "3C0754": "Apple", "A4B121": "Apple", "90B21F": "Apple",
+
+            # Samsung
+            "BC83A7": "Samsung", "60D819": "Samsung", "0026C7": "Samsung", "1CB72C": "Samsung", "6CB7F4": "Samsung",
+
+            # Xiaomi
+            "60EB69": "Xiaomi", "A0F3C1": "Xiaomi", "3C5A37": "Xiaomi", "B0E235": "Xiaomi", "48A9D2": "Xiaomi",
+
+            # Huawei
+            "A0B4A5": "Huawei", "FCAA14": "Huawei", "30F335": "Huawei", "84A466": "Huawei", "C4AD34": "Huawei",
+
+            # TP-Link
+            "3C57D5": "TP-Link", "FCFC48": "TP-Link", "30B5C2": "TP-Link", "647002": "TP-Link", "50984B": "TP-Link",
+
+            # Netgear
+            "FCF5C4": "Netgear", "A02BB8": "Netgear", "28C68E": "Netgear", "001E2A": "Netgear", "0026F2": "Netgear",
+
+            # Dell
+            "D067E5": "Dell", "C8D3A3": "Dell", "1C697A": "Dell", "F8BC12": "Dell", "F0F1A9": "Dell",
+
+            # Canon
+            "0026B6": "Canon", "B8B5AF": "Canon", "089E08": "Canon", "0021E9": "Canon",
+
+            # Hikvision
+            "AC9B0A": "Hikvision", "D4AE52": "Hikvision", "64A837": "Hikvision",
+
+            # VMware
+            "000C29": "VMware", "000569": "VMware", "005056": "VMware",
+
+            # Raspberry Pi
+            "DC44B6": "Raspberry Pi", "B827EB": "Raspberry Pi", "E45F01": "Raspberry Pi",
+
+            # Cisco
+            "00000C": "Cisco", "F8E71E": "Cisco", "705AB6": "Cisco",
+
+            # Intel
+            "3C970E": "Intel", "F0DE71": "Intel", "A0369F": "Intel",
+
+            # HP
+            "1C7508": "HP", "B4B52F": "HP", "B0A8B9": "HP",
+
+            # Asus
+            "F8A45F": "Asus", "14D6XX": "Asus", "74D435": "Asus",
+
+            # Lenovo
+            "041E64": "Lenovo", "28D244": "Lenovo", "001EC9": "Lenovo",
+        }
+
+        vendor = vendor_prefixes.get(prefix, "Unknown")
 
     return mac_address, vendor
+
 
 
 
