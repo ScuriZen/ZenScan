@@ -135,7 +135,7 @@ def scan_ip_range(start_ip, end_ip):
 def run_ip_scan():
     start_ip = input("Enter start IP: ").strip()
     end_ip = input("Enter end IP: ").strip()
-    scan_ip_range(start_ip, end_ip)
+    run_ip_range(start_ip, end_ip)
   
 if __name__ == "__main__":
     run_ip_scan()
