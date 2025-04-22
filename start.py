@@ -8,6 +8,7 @@ from scanners.sqlmap_scan import run_sqlmap_scan
 from scanners.dir_scan import run_dir_scan
 from scanners.subdomain_scan import run_subdomain_scan
 from scanners.ip_scan import run_ip_scan
+from scanners.wapiti_scan import run_wapiti_scan
 
 def main():
     zen_banner()
