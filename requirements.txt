@@ -5,3 +5,4 @@ requests
 sqlmap
 tqdm
 mac-vendor-lookup
+beautifulsoup4
