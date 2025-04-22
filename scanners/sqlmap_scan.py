@@ -5,7 +5,7 @@ from tqdm import tqdm
 def run_sqlmap_scan(target):
     print(f"\n[+] Running SQL Injection Scan on {target}...\n")
 
-    command = f"sqlmap -u {target} --dbs --batch"
+    command = f"sqlmap -u {target} --dbs --crawl 2 --batch"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
     total_lines = 50  
