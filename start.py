@@ -52,7 +52,7 @@ def main():
             run_dir_scan(target)
 
         elif choice == "6":
-            target = input("Enter target domain: ")
+            target = input("Enter target domain (e.g., example.com):")
             run_subdomain_scan(target)
 
         elif choice == '7':
